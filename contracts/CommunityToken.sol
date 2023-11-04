@@ -13,6 +13,8 @@ contract CommunityToken is ERC20 {
         string memory symbol,
         uint amount
     ) ERC20(name, symbol) {
+        address abxAddress = 0x38b23C06BE9c1BEe388305153737F3de98a763e5;
+        abxToken = ABXToken(abxAddress);
         _mint(msg.sender, amount * 10 ** 18); // Initial supply
     }
 

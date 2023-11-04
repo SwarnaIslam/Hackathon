@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Form, Input, Select } from "antd";
 import Web3 from "web3";
 import abi from "../contracts/Communities.json";
-
+import { ethers } from "ethers";
 const layout = {
   labelCol: {
     span: 8,
@@ -19,7 +19,7 @@ const tailLayout = {
 };
 const Community = () => {
   const formRef = React.useRef(null);
-  const contractAddress = "0x498a3655B5afB3f749e7077bB73f3dfbB4206cE4"; // Replace with your contract's address
+  const contractAddress = "0xd4Ae8EbC499A8b12d2233D4e3510B8E3c98e4699"; // Replace with your contract's address
   const userAddress = localStorage.getItem("acountAddress"); // Replace with the user's account address
 
   const provider = window.ethereum;
@@ -33,20 +33,27 @@ const Community = () => {
       if (typeof provider !== "undefined") {
         console.log(userAddress);
         console.log(communityContract);
+        const amount = ethers.utils.parseEther("0.01").toString();
         // const ct = value.community_title;
         // const d = value.description;
         // const ntm = value.native_token_name;
         // const nts = value.native_token_symbol;
         await communityContract.methods
-          .createCommunity(
-            value.community_title,
-            value.description,
+          .createCommunityToken(
             parseInt(value.stake_amount),
             parseInt(value.exchange_rate),
-            value.native_token_name,
-            value.native_token_symbol
+            String(value.native_token_name),
+            String(value.native_token_symbol)
           )
-          .call({ from: userAddress });
+          .send({ from: userAddress, value: amount });
+
+        await communityContract.methods
+          .createCommunity(
+            String(value.community_title),
+            String(value.description),
+            parseInt(value.stake_amount)
+          )
+          .send({ from: userAddress, value: amount });
       }
 
       // Success message

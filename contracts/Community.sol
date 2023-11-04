@@ -31,24 +31,19 @@ contract Community {
     constructor(
         string memory title1,
         string memory description1,
-        uint256 initialTokens,
-        uint conversionRate,
-        string memory name,
-        string memory symbol
+        address tokenAddress,
+        uint256 initialTokens
     ) {
         title = title1;
         description = description1;
         owner = msg.sender;
-        myAddress = 0x38b23C06BE9c1BEe388305153737F3de98a763e5;
-        abxToken = ABXToken(myAddress);
-        myCommunityToken = new CommunityToken(
-            name,
-            symbol,
-            initialTokens * conversionRate
-        );
+        //address abxAddress = "0x38b23C06BE9c1BEe388305153737F3de98a763e5";
+        address abxAddress = 0x38b23C06BE9c1BEe388305153737F3de98a763e5;
+
+        abxToken = ABXToken(abxAddress);
         // Transfer initial tokens to this contract
         abxToken.transferFrom(msg.sender, address(this), initialTokens);
-        nativeTokenAddress = address(myCommunityToken);
+        myCommunityToken = CommunityToken(tokenAddress);
     }
 
     // mapping(uint => mapping(address => bool)) private hasVoted;
